@@ -37,6 +37,14 @@ def __init__(self, inventario_inicial=None):
 - `TiendaOnline()` → inventario vacío e independiente por instancia.
 - Agregar un producto en la tienda 1 y crear la tienda 2 → `tienda2.inventario == {}`.
 
+**Pruebas automatizadas (pytest — `test_main.py`):**
+- Clase `TestBug1InventarioCompartido` con 3 casos:
+  - `test_instancias_tienen_inventarios_independientes`
+  - `test_inventario_vacio_por_defecto`
+  - `test_inventario_inicial_se_usa_cuando_se_proporciona`
+- Ejecutar: `python -m pytest test_main.py -k Bug1`
+- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
+
 ---
 
 ## PR #2 — Rama: `fix/bug-2-cupon-descuento`
@@ -65,7 +73,15 @@ if cupon_descuento == "SENA2026":
 
 **Pruebas ejecutadas (resultado: ✅ todas pasan):**
 - Producto de $100 con cupón → total $80.0.
-- Producto de $100 sin cupón → total $100.0 (sin descuento).                
+- Producto de $100 sin cupón → total $100.0 (sin descuento).
+
+**Pruebas automatizadas (pytest — `test_main.py`):**
+- Clase `TestBug2DescuentoInvertido` con 3 casos:
+  - `test_cupon_aplica_20_por_ciento_de_descuento`
+  - `test_sin_cupon_no_hay_descuento`
+  - `test_cupon_con_carrito_multiple`
+- Ejecutar: `python -m pytest test_main.py -k Bug2`
+- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
 
 ---
 
@@ -96,6 +112,14 @@ self.ventas_totales += total_pedido
 - Procesar pedido de $200 → `ventas_totales == 200.0`, sin excepciones.
 - Pedido posterior → el total se acumula correctamente.
 
+**Pruebas automatizadas (pytest — `test_main.py`):**
+- Clase `TestBug3TypoVentasTotales` con 3 casos:
+  - `test_venta_se_registra_sin_attributeerror`
+  - `test_ventas_totales_acumulan_pedidos`
+  - `test_ventas_totales_se_inicializan_en_cero`
+- Ejecutar: `python -m pytest test_main.py -k Bug3`
+- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
+
 ---
 
 ## PR #4 — Rama: `fix/bug-4-producto-inexistente`
@@ -114,7 +138,8 @@ existencia del id:
 producto = self.inventario[id_prod]  # BUG: KeyError si no existe
 ```
 
-**Solución:** validar antes de acceder y lanzar un `ValueError` informativo:
+**Solución:** validar antes de acceder y lanzar un `ValueError` informativo
+(implementada en `main.py`, líneas 29-30):
 
 ```python
 if id_prod not in self.inventario:
@@ -125,6 +150,14 @@ producto = self.inventario[id_prod]
 **Pruebas ejecutadas (resultado: ✅ todas pasan):**
 - Pedido con `NO_EXISTE` → `ValueError` claro (sin `KeyError`), inventario intacto.
 - Pedido con producto válido → se procesa normalmente.
+
+**Pruebas automatizadas (pytest — `test_main.py`):**
+- Clase `TestBug4ProductoInexistente` con 3 casos:
+  - `test_pedido_de_producto_inexistente_lanza_valueerror`
+  - `test_error_no_es_keyerror`
+  - `test_inventario_intacto_tras_error`
+- Ejecutar: `python -m pytest test_main.py -k Bug4`
+- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
 
 ---
 
@@ -144,12 +177,13 @@ que hubiera stock suficiente:
 producto['cantidad'] -= cant_comprada  # BUG: puede quedar negativo
 ```
 
-**Solución:** validar antes de descontar y rechazar con un `ValueError`:
+**Solución:** validar antes de descontar y rechazar con un `ValueError`
+(implementada en `main.py`, líneas 34-39):
 
 ```python
 if cant_comprada > producto['cantidad']:
     raise ValueError(
-        f"No hay stock suficiente para '{id_prod}' "
+        f"Stock insuficiente para '{id_prod}' "
         f"(disponible: {producto['cantidad']}, solicitado: {cant_comprada})"
     )
 producto['cantidad'] -= cant_comprada
@@ -158,6 +192,14 @@ producto['cantidad'] -= cant_comprada
 **Pruebas ejecutadas (resultado: ✅ todas pasan):**
 - Pedido de 99 con stock 2 → `ValueError` y el stock queda intacto (2).
 - Venta exacta al límite (stock 2, pedido 2) → stock queda en 0.
+
+**Pruebas automatizadas (pytest — `test_main.py`):**
+- Clase `TestBug5StockNegativo` con 3 casos:
+  - `test_pedido_mayor_al_stock_lanza_valueerror`
+  - `test_stock_intacto_cuando_no_hay_suficiente`
+  - `test_venta_al_limite_exacto_deja_stock_en_cero`
+- Ejecutar: `python -m pytest test_main.py -k Bug5`
+- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
 
 ---
 
@@ -180,7 +222,8 @@ for id_producto in self.inventario.keys():  # BUG: se modifica el dict al iterar
         del self.inventario[id_producto]
 ```
 
-**Solución:** iterar sobre una copia de las claves:
+**Solución:** iterar sobre una copia de las claves (implementada en `main.py`,
+línea 58):
 
 ```python
 for id_producto in list(self.inventario.keys()):
@@ -190,6 +233,14 @@ for id_producto in list(self.inventario.keys()):
 - Productos con cantidad `0` y negativa → eliminados sin excepciones.
 - Productos con stock disponible → se conservan.
 - Inventario que queda vacío tras limpiar → `{}`.
+
+**Pruebas automatizadas (pytest — `test_main.py`):**
+- Clase `TestBug6RuntimeErrorAlLimpiar` con 3 casos:
+  - `test_limpiar_elimina_productos_con_cantidad_cero`
+  - `test_limpiar_elimina_productos_con_cantidad_negativa`
+  - `test_limpiar_no_lanza_runtimeerror_y_vacia_inventario`
+- Ejecutar: `python -m pytest test_main.py -k Bug6`
+- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
 
 ---
 
@@ -203,3 +254,11 @@ Iniciando pruebas del sistema...
 Inventario tienda 2: {}
 Total del pedido (con descuento): $304000.0
 ```
+
+Además, la suite automatizada completa valida los 6 fallos:
+
+```
+python -m pytest test_main.py
+```
+
+Resultado: ✅ 18 passed (3 tests por cada uno de los 6 bugs).
