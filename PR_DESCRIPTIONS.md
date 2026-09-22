@@ -33,7 +33,7 @@ def __init__(self, inventario_inicial=None):
         self.inventario = inventario_inicial
 ```
 
-**Pruebas ejecutadas (resultado: ✅ todas pasan):**
+
 - `TiendaOnline()` → inventario vacío e independiente por instancia.
 - Agregar un producto en la tienda 1 y crear la tienda 2 → `tienda2.inventario == {}`.
 
@@ -71,7 +71,7 @@ if cupon_descuento == "SENA2026":
     total_pedido = total_pedido * 0.80  # 20% de descuento (paga el 80%)
 ```
 
-**Pruebas ejecutadas (resultado: ✅ todas pasan):**
+
 - Producto de $100 con cupón → total $80.0.
 - Producto de $100 sin cupón → total $100.0 (sin descuento).
 
@@ -107,7 +107,6 @@ self.ventas_totaIes += total_pedido  # BUG: no existe este atributo
 self.ventas_totales += total_pedido
 ```
 
-**Pruebas ejecutadas (resultado: ✅ todas pasan):**
 - Procesar pedido de $200 → `ventas_totales == 200.0`, sin excepciones.
 - Pedido posterior → el total se acumula correctamente.
 
@@ -146,7 +145,7 @@ if id_prod not in self.inventario:
 producto = self.inventario[id_prod]
 ```
 
-**Pruebas ejecutadas (resultado: ✅ todas pasan):**
+
 - Pedido con `NO_EXISTE` → `ValueError` claro (sin `KeyError`), inventario intacto.
 - Pedido con producto válido → se procesa normalmente.
 
@@ -188,7 +187,7 @@ if cant_comprada > producto['cantidad']:
 producto['cantidad'] -= cant_comprada
 ```
 
-**Pruebas ejecutadas (resultado: ✅ todas pasan):**
+
 - Pedido de 99 con stock 2 → `ValueError` y el stock queda intacto (2).
 - Venta exacta al límite (stock 2, pedido 2) → stock queda en 0.
 
@@ -228,7 +227,7 @@ línea 58):
 for id_producto in list(self.inventario.keys()):
 ```
 
-**Pruebas ejecutadas (resultado: ✅ todas pasan):**
+
 - Productos con cantidad `0` y negativa → eliminados sin excepciones.
 - Productos con stock disponible → se conservan.
 - Inventario que queda vacío tras limpiar → `{}`.
@@ -259,5 +258,3 @@ Además, la suite automatizada completa valida los 6 fallos:
 ```
 python -m pytest test_main.py
 ```
-
-Resultado: ✅ 18 passed (3 tests por cada uno de los 6 bugs).
