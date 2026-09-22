@@ -43,7 +43,7 @@ def __init__(self, inventario_inicial=None):
   - `test_inventario_vacio_por_defecto`
   - `test_inventario_inicial_se_usa_cuando_se_proporciona`
 - Ejecutar: `python -m pytest test_main.py -k Bug1`
-- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
+
 
 ---
 
@@ -81,7 +81,6 @@ if cupon_descuento == "SENA2026":
   - `test_sin_cupon_no_hay_descuento`
   - `test_cupon_con_carrito_multiple`
 - Ejecutar: `python -m pytest test_main.py -k Bug2`
-- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
 
 ---
 
@@ -118,7 +117,7 @@ self.ventas_totales += total_pedido
   - `test_ventas_totales_acumulan_pedidos`
   - `test_ventas_totales_se_inicializan_en_cero`
 - Ejecutar: `python -m pytest test_main.py -k Bug3`
-- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
+
 
 ---
 
@@ -157,7 +156,7 @@ producto = self.inventario[id_prod]
   - `test_error_no_es_keyerror`
   - `test_inventario_intacto_tras_error`
 - Ejecutar: `python -m pytest test_main.py -k Bug4`
-- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
+
 
 ---
 
@@ -199,7 +198,7 @@ producto['cantidad'] -= cant_comprada
   - `test_stock_intacto_cuando_no_hay_suficiente`
   - `test_venta_al_limite_exacto_deja_stock_en_cero`
 - Ejecutar: `python -m pytest test_main.py -k Bug5`
-- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
+
 
 ---
 
@@ -240,7 +239,7 @@ for id_producto in list(self.inventario.keys()):
   - `test_limpiar_elimina_productos_con_cantidad_negativa`
   - `test_limpiar_no_lanza_runtimeerror_y_vacia_inventario`
 - Ejecutar: `python -m pytest test_main.py -k Bug6`
-- Resultado: ✅ 3/3 pasan (suite completa: 18/18).
+
 
 ---
 
